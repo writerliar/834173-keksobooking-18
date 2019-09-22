@@ -63,7 +63,7 @@ var createAdvert = function (id) {
       x: randomFromInterval(0, LIMIT_X) + 'px',
       y: randomFromInterval(MIN_Y, MAX_Y) + 'px'
     }
-  }
+  };
 };
 
 var generateAdverts = function (num) {
@@ -79,12 +79,12 @@ var generateAdverts = function (num) {
 var renderAdvert = function (advert) {
   var advertItem = pinAdvertTemplate.cloneNode(true);
 
-    advertItem.querySelector('img').src = advert.author.avatar;
-    advertItem.querySelector('img').alt = advert.offer.title;
-    advertItem.style.left = advert.location.x;
-    advertItem.style.top = advert.location.y;
+  advertItem.querySelector('img').src = advert.author.avatar;
+  advertItem.querySelector('img').alt = advert.offer.title;
+  advertItem.style.left = advert.location.x;
+  advertItem.style.top = advert.location.y;
 
-    return advertItem;
+  return advertItem;
 };
 
 var addAdvert = function (adverts) {
