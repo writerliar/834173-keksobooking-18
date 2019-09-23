@@ -32,7 +32,6 @@ var titles = [
   'Матрас на заднем дворе. За доп плату дам зонт'
 ];
 
-var address = '600, 350';
 var price = 2000;
 var rooms = 4;
 var guests = 5;
@@ -74,7 +73,7 @@ var getLocation = function () {
   return {
     x: getRandomNumber(MapRect.LEFT, MapRect.RIGHT),
     y: getRandomNumber(MapRect.TOP, MapRect.BOTTOM)
-  }
+  };
 };
 
 var createAdvert = function (id) {
