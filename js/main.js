@@ -22,7 +22,8 @@ var MapRect = {
 
 var PinSize = {
   WIDTH: 50,
-  HEIGHT: 70
+  HEIGHT: 70,
+  RADIUS: 25
 };
 
 var titles = [
@@ -103,7 +104,7 @@ var createAdvert = function (id) {
 var generateAdverts = function (num) {
   var adverts = [];
 
-  for (var i = 1; i < num; i++) {
+  for (var i = 1; i <= num; i++) {
     adverts.push(createAdvert(i));
   }
 
@@ -116,7 +117,7 @@ var renderAdvert = function (advert) {
 
   advertAvatar.src = advert.author.avatar;
   advertAvatar.alt = advert.offer.title;
-  advertItem.style.left = advert.location.x - PinSize.WIDTH / 2 + 'px';
+  advertItem.style.left = advert.location.x - PinSize.RADIUS + 'px';
   advertItem.style.top = advert.location.y - PinSize.HEIGHT + 'px';
 
   return advertItem;
@@ -132,6 +133,98 @@ var addAdverts = function (adverts) {
   pinAdvertList.appendChild(fragment);
 };
 
-map.classList.remove('map--faded');
+//временно закомментировала, чтобы не мешала
+// addAdverts(generateAdverts(MAX_ADVERTS));
 
-addAdverts(generateAdverts(MAX_ADVERTS));
+//задание 8
+
+//добавить disabled элементам управления формы
+
+var advertForm = document.querySelector('.ad-form');
+var advertFormParts = advertForm.querySelectorAll('fieldset');
+var filterForm = document.querySelector('.map__filters');
+var filterFormParts = filterForm.querySelectorAll('.map__filter');
+var filterFormFeatures = filterForm.querySelector('.map__features').querySelectorAll('input');
+
+
+var setDisabled = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    array[i].setAttribute('disabled', 'true');
+  }
+};
+
+var blockPage = function () {
+  setDisabled(advertFormParts);
+  setDisabled(filterFormParts);
+  setDisabled(filterFormFeatures);
+};
+
+blockPage();
+
+
+//8.1 Активация страницы
+var deleteDisabled = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    array[i].removeAttribute('disabled');
+  }
+};
+
+var activatePage = function () {
+  deleteDisabled(advertFormParts);
+  deleteDisabled(filterFormParts);
+  deleteDisabled(filterFormFeatures);
+  map.classList.remove('map--faded');
+  advertForm.classList.remove('ad-form--disabled');
+};
+
+//активация карты при клике mousedown на основной пин (.map__pin--main)
+var mainPin = document.querySelector('.map__pin--main');
+
+mainPin.addEventListener('mousedown', function() {
+  activatePage();
+});
+
+//активация страницы при enter
+var KeyboardKey = {
+  ENTER: 'Enter'
+};
+
+var isEnterKey = function (evt) {
+  return evt.key === KeyboardKey.ENTER;
+};
+
+mainPin.addEventListener('keydown', function(evt) {
+  if (isEnterKey(evt)) {
+    activatePage();
+  }
+});
+
+//8.2 Заполнение поля адреса
+//взаимодействие с меткой приводит к заполнению поля адреса
+//поле адреса должно быть заполнено всегда, в том числе сразу после открытия страницы (см тз)
+
+var addressInput = document.querySelector('#address');
+
+var MainPinSize = {
+  WIDTH: 62,
+  HEIGHT: 84,
+  RADIUS: 31
+};
+
+var mainPinX = mainPin.style.left;
+var mainPinY = mainPin.style.top;
+
+var mainPinLocation = {
+  x: mainPinX,
+  y: mainPinY
+};
+
+addressInput.value = mainPinLocation.x + ', ' + mainPinLocation.y;
+
+
+
+
+
+//8.3 Непростая валидация
+//установки соответствия количества гостей с количеством комнат
+//Вы пишите код проверки соответствия и если выбранное количество гостей не подходит под количество комнат, вызываете метод setCustomValidity
