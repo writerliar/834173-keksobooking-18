@@ -138,14 +138,24 @@ var addAdverts = function (adverts) {
 
 //задание 8
 
-//добавить disabled элементам управления формы
-
 var advertForm = document.querySelector('.ad-form');
 var advertFormParts = advertForm.querySelectorAll('fieldset');
 var filterForm = document.querySelector('.map__filters');
 var filterFormParts = filterForm.querySelectorAll('.map__filter');
 var filterFormFeatures = filterForm.querySelector('.map__features').querySelectorAll('input');
+var mainPin = document.querySelector('.map__pin--main');
+var addressInput = advertForm.querySelector('#address');
 
+var MainPinSize = {
+  WIDTH: 62,
+  HEIGHT: 84,
+  RADIUS: 31,
+  HALF_HEIGHT: 42
+};
+
+var KeyboardKey = {
+  ENTER: 'Enter'
+};
 
 var setDisabled = function (array) {
   for (var i = 0; i < array.length; i++) {
@@ -157,12 +167,9 @@ var blockPage = function () {
   setDisabled(advertFormParts);
   setDisabled(filterFormParts);
   setDisabled(filterFormFeatures);
+  fillAddressDisable();
 };
 
-blockPage();
-
-
-//8.1 Активация страницы
 var deleteDisabled = function (array) {
   for (var i = 0; i < array.length; i++) {
     array[i].removeAttribute('disabled');
@@ -175,23 +182,16 @@ var activatePage = function () {
   deleteDisabled(filterFormFeatures);
   map.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
-};
-
-//активация карты при клике mousedown на основной пин (.map__pin--main)
-var mainPin = document.querySelector('.map__pin--main');
-
-mainPin.addEventListener('mousedown', function() {
-  activatePage();
-});
-
-//активация страницы при enter
-var KeyboardKey = {
-  ENTER: 'Enter'
+  fillAddressActivate();
 };
 
 var isEnterKey = function (evt) {
   return evt.key === KeyboardKey.ENTER;
 };
+
+mainPin.addEventListener('mousedown', function() {
+  activatePage();
+});
 
 mainPin.addEventListener('keydown', function(evt) {
   if (isEnterKey(evt)) {
@@ -199,32 +199,40 @@ mainPin.addEventListener('keydown', function(evt) {
   }
 });
 
-//8.2 Заполнение поля адреса
-//взаимодействие с меткой приводит к заполнению поля адреса
-//поле адреса должно быть заполнено всегда, в том числе сразу после открытия страницы (см тз)
-
-var addressInput = document.querySelector('#address');
-
-var MainPinSize = {
-  WIDTH: 62,
-  HEIGHT: 84,
-  RADIUS: 31
-};
-
-var mainPinX = mainPin.style.left;
-var mainPinY = mainPin.style.top;
+var mainPinX = Math.floor(parseInt(mainPin.style.left, 10));
+var mainPinY = Math.floor(parseInt(mainPin.style.top, 10));
 
 var mainPinLocation = {
   x: mainPinX,
   y: mainPinY
 };
 
-addressInput.value = mainPinLocation.x + ', ' + mainPinLocation.y;
+var fillAddressDisable = function () {
+  addressInput.value = (mainPinLocation.x + MainPinSize.RADIUS) + ', ' + (mainPinLocation.y + MainPinSize.HALF_HEIGHT);
+};
+
+var fillAddressActivate = function () {
+  addressInput.value = (mainPinLocation.x + MainPinSize.RADIUS) + ', ' + (mainPinLocation.y + MainPinSize.HEIGHT);
+};
 
 
-
-
+blockPage();
 
 //8.3 Непростая валидация
-//установки соответствия количества гостей с количеством комнат
-//Вы пишите код проверки соответствия и если выбранное количество гостей не подходит под количество комнат, вызываете метод setCustomValidity
+var roomsInput = advertForm.querySelector('#room_number');
+var guestsInput = advertForm.querySelector('#capacity');
+
+guestsInput.addEventListener('change', function () {
+  console.log(roomsInput.value)
+  if (roomsInput.value === 1 && guestsInput.value !== 1) {
+    guestsInput.setCustomValidity('В одной комнате может проживать только один гость');
+  } else if (roomsInput.value === 2 && guestsInput.value > 2 || guestsInput.value === 0) {
+    guestsInput.setCustomValidity('В двух комнатах может проживать не менее одного и не более двух гостей');
+  } else if (roomsInput.value === 3 && guestsInput.value === 0) {
+    guestsInput.setCustomValidity('В трех комнатах может проживать не более трех гостей и не менее одного гостя');
+  } else if (roomsInput.value === 100 && guestsInput.value > 0) {
+    guestsInput.setCustomValidity('Извините, это место не для гостей');
+  } else {
+    guestsInput.setCustomValidity('');
+  }
+});
