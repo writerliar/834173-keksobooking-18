@@ -47,6 +47,18 @@ var map = document.querySelector('.map');
 var pinAdvertTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var pinAdvertList = document.querySelector('.map__pins');
 
+var Style = {
+  HIDE: 'hidden',
+};
+
+var showElement = function (element) {
+  element.classList.remove(Style.HIDE);
+};
+
+var hideElement = function (element) {
+  element.classList.add(Style.HIDE);
+};
+
 var getRandomElement = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
@@ -133,11 +145,9 @@ var addAdverts = function (adverts) {
   pinAdvertList.appendChild(fragment);
 };
 
-//временно закомментировала, чтобы не мешала
-// addAdverts(generateAdverts(MAX_ADVERTS));
+addAdverts(generateAdverts(MAX_ADVERTS));
 
-//задание 8
-
+// задание 8
 var advertForm = document.querySelector('.ad-form');
 var advertFormParts = advertForm.querySelectorAll('fieldset');
 var filterForm = document.querySelector('.map__filters');
@@ -145,6 +155,8 @@ var filterFormParts = filterForm.querySelectorAll('.map__filter');
 var filterFormFeatures = filterForm.querySelector('.map__features').querySelectorAll('input');
 var mainPin = document.querySelector('.map__pin--main');
 var addressInput = advertForm.querySelector('#address');
+
+var newPins = map.querySelectorAll('.map__pin');
 
 var MainPinSize = {
   WIDTH: 62,
@@ -168,6 +180,10 @@ var blockPage = function () {
   setDisabled(filterFormParts);
   setDisabled(filterFormFeatures);
   fillAddressDisable();
+
+  for (var i = 1; i < newPins.length; i++) {
+    hideElement(newPins[i]);
+  }
 };
 
 var deleteDisabled = function (array) {
@@ -183,17 +199,21 @@ var activatePage = function () {
   map.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
   fillAddressActivate();
+
+  for (var i = 1; i < newPins.length; i++) {
+    showElement(newPins[i]);
+  }
 };
 
 var isEnterKey = function (evt) {
   return evt.key === KeyboardKey.ENTER;
 };
 
-mainPin.addEventListener('mousedown', function() {
+mainPin.addEventListener('mousedown', function () {
   activatePage();
 });
 
-mainPin.addEventListener('keydown', function(evt) {
+mainPin.addEventListener('keydown', function (evt) {
   if (isEnterKey(evt)) {
     activatePage();
   }
@@ -218,22 +238,10 @@ var fillAddressActivate = function () {
 
 blockPage();
 
-//8.3 Непростая валидация
+// 8.3 Непростая валидация
 var roomsSelect = advertForm.querySelector('#room_number');
 var capacitySelect = advertForm.querySelector('#capacity');
 var capacityList = capacitySelect.querySelectorAll('option');
-
-var Style = {
-  HIDDEN: 'hidden'
-};
-
-var showElement = function (element) {
-  element.classList.remove(Style.HIDDEN);
-};
-
-var hideElement = function (element) {
-  element.classList.add(Style.HIDDEN);
-};
 
 var roomToCapacity = {
   1: [1],
@@ -261,17 +269,17 @@ var getRoomValue = function (idx) {
   return roomsSelect.options[idx].value;
 };
 
-var syncCapacity = function (rooms) {
-  var options = roomToCapacity[rooms];
+var syncCapacity = function (roomsQuantity) {
+  var options = roomToCapacity[roomsQuantity];
 
-  if (isNotSelected(options)){
+  if (isNotSelected(options)) {
     capacitySelect.selectedIndex = getCapacityIndex(options);
   }
 
   capacityList.forEach(function (option) {
     var hasOption = options.indexOf(+option.value) > -1;
     (hasOption ? showElement : hideElement)(option);
-  })
+  });
 };
 
 var onRoomChange = function (evt) {
