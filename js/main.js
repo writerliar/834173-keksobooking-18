@@ -219,20 +219,65 @@ var fillAddressActivate = function () {
 blockPage();
 
 //8.3 Непростая валидация
-var roomsInput = advertForm.querySelector('#room_number');
-var guestsInput = advertForm.querySelector('#capacity');
+var roomsSelect = advertForm.querySelector('#room_number');
+var capacitySelect = advertForm.querySelector('#capacity');
+var capacityList = capacitySelect.querySelectorAll('option');
 
-guestsInput.addEventListener('change', function () {
-  console.log(roomsInput.value)
-  if (roomsInput.value === 1 && guestsInput.value !== 1) {
-    guestsInput.setCustomValidity('В одной комнате может проживать только один гость');
-  } else if (roomsInput.value === 2 && guestsInput.value > 2 || guestsInput.value === 0) {
-    guestsInput.setCustomValidity('В двух комнатах может проживать не менее одного и не более двух гостей');
-  } else if (roomsInput.value === 3 && guestsInput.value === 0) {
-    guestsInput.setCustomValidity('В трех комнатах может проживать не более трех гостей и не менее одного гостя');
-  } else if (roomsInput.value === 100 && guestsInput.value > 0) {
-    guestsInput.setCustomValidity('Извините, это место не для гостей');
-  } else {
-    guestsInput.setCustomValidity('');
-  }
+var Style = {
+  HIDDEN: 'hidden'
+};
+
+var showElement = function (element) {
+  element.classList.remove(Style.HIDDEN);
+};
+
+var hideElement = function (element) {
+  element.classList.add(Style.HIDDEN);
+};
+
+var roomToCapacity = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
+
+var capacityToIndex = {};
+capacityList.forEach(function (option) {
+  capacityToIndex[option.value] = option.index;
 });
+
+var isNotSelected = function (options) {
+  var selected = +capacityList[capacitySelect.selectedIndex].value;
+
+  return options.indexOf(selected) === -1;
+};
+
+var getCapacityIndex = function (options) {
+  return capacityToIndex[Math.max.apply(null, options)];
+};
+
+var getRoomValue = function (idx) {
+  return roomsSelect.options[idx].value;
+};
+
+var syncCapacity = function (rooms) {
+  var options = roomToCapacity[rooms];
+
+  if (isNotSelected(options)){
+    capacitySelect.selectedIndex = getCapacityIndex(options);
+  }
+
+  capacityList.forEach(function (option) {
+    var hasOption = options.indexOf(+option.value) > -1;
+    (hasOption ? showElement : hideElement)(option);
+  })
+};
+
+var onRoomChange = function (evt) {
+  syncCapacity(evt.target.value);
+};
+
+roomsSelect.addEventListener('change', onRoomChange);
+
+syncCapacity(getRoomValue(roomsSelect.selectedIndex));
