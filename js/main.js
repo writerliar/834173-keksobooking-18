@@ -45,10 +45,12 @@ var photos = [
 
 var map = document.querySelector('.map');
 var pinAdvertTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var pinAdvertList = document.querySelector('.map__pins');
+var pinContainer = document.querySelector('.map__pins');
 
 var Style = {
   HIDE: 'hidden',
+  DISABLED: 'ad-form--disabled',
+  FADE: 'map--faded'
 };
 
 var showElement = function (element) {
@@ -124,15 +126,15 @@ var generateAdverts = function (num) {
 };
 
 var renderAdvert = function (advert) {
-  var advertItem = pinAdvertTemplate.cloneNode(true);
-  var advertAvatar = advertItem.querySelector('img');
+  var pin = pinAdvertTemplate.cloneNode(true);
+  var pinImage = pin.querySelector('img');
 
-  advertAvatar.src = advert.author.avatar;
-  advertAvatar.alt = advert.offer.title;
-  advertItem.style.left = advert.location.x - PinSize.RADIUS + 'px';
-  advertItem.style.top = advert.location.y - PinSize.HEIGHT + 'px';
+  pinImage.src = advert.author.avatar;
+  pinImage.alt = advert.offer.title;
+  pin.style.left = advert.location.x - PinSize.RADIUS + 'px';
+  pin.style.top = advert.location.y - PinSize.HEIGHT + 'px';
 
-  return advertItem;
+  return pin;
 };
 
 var addAdverts = function (adverts) {
@@ -142,7 +144,7 @@ var addAdverts = function (adverts) {
     fragment.appendChild(renderAdvert(advert));
   });
 
-  pinAdvertList.appendChild(fragment);
+  pinContainer.appendChild(fragment);
 };
 
 addAdverts(generateAdverts(MAX_ADVERTS));
@@ -150,93 +152,76 @@ addAdverts(generateAdverts(MAX_ADVERTS));
 // задание 8
 var advertForm = document.querySelector('.ad-form');
 var advertFormParts = advertForm.querySelectorAll('fieldset');
-var filterForm = document.querySelector('.map__filters');
-var filterFormParts = filterForm.querySelectorAll('.map__filter');
-var filterFormFeatures = filterForm.querySelector('.map__features').querySelectorAll('input');
+var filterFormList = map.querySelectorAll('.map__filter, .map__checkbox');
 var mainPin = document.querySelector('.map__pin--main');
 var addressInput = advertForm.querySelector('#address');
 
-var newPins = map.querySelectorAll('.map__pin');
-
 var MainPinSize = {
-  WIDTH: 62,
-  HEIGHT: 84,
-  RADIUS: 31,
-  HALF_HEIGHT: 42
+  WIDTH: 65,
+  HEIGHT: 80,
+  RADIUS: 32
+};
+
+var getMainPinLocation = function (height) {
+  return {
+    x: mainPin.offsetLeft + MainPinSize.RADIUS,
+    y: mainPin.offsetTop + height
+  };
+};
+
+var renderAddress = function (coords) {
+  addressInput.value = coords.x + ', ' + coords.y;
 };
 
 var KeyboardKey = {
   ENTER: 'Enter'
 };
 
-var setDisabled = function (array) {
-  for (var i = 0; i < array.length; i++) {
-    array[i].setAttribute('disabled', 'true');
-  }
+var setDisabled = function (element) {
+  element.disabled = true;
 };
 
-var blockPage = function () {
-  setDisabled(advertFormParts);
-  setDisabled(filterFormParts);
-  setDisabled(filterFormFeatures);
-  fillAddressDisable();
-
-  for (var i = 1; i < newPins.length; i++) {
-    hideElement(newPins[i]);
-  }
+var deleteDisabled = function (element) {
+  element.disabled = false;
 };
 
-var deleteDisabled = function (array) {
-  for (var i = 0; i < array.length; i++) {
-    array[i].removeAttribute('disabled');
-  }
+var setFormLock = function (locked) {
+  advertFormParts.forEach(locked ? setDisabled : deleteDisabled);
+  advertForm.classList[locked ? 'add' : 'remove'](Style.DISABLED);
+  filterFormList.forEach(locked ? setDisabled : deleteDisabled);
+};
+
+var deactivatePage = function () {
+  setFormLock(true);
+  renderAddress(getMainPinLocation(MainPinSize.RADIUS));
+  mainPin.addEventListener('mousedown', onMainPinMouseDown);
+  mainPin.addEventListener('keydown', onMainPinEnterPress);
 };
 
 var activatePage = function () {
-  deleteDisabled(advertFormParts);
-  deleteDisabled(filterFormParts);
-  deleteDisabled(filterFormFeatures);
-  map.classList.remove('map--faded');
-  advertForm.classList.remove('ad-form--disabled');
-  fillAddressActivate();
-
-  for (var i = 1; i < newPins.length; i++) {
-    showElement(newPins[i]);
-  }
+  setFormLock(false);
+  map.classList.remove(Style.FADE);
+  advertForm.classList.remove(Style.DISABLED);
+  renderAddress(getMainPinLocation(MainPinSize.HEIGHT));
 };
 
 var isEnterKey = function (evt) {
   return evt.key === KeyboardKey.ENTER;
 };
 
-mainPin.addEventListener('mousedown', function () {
+var onMainPinMouseDown = function () {
   activatePage();
-});
+  mainPin.removeEventListener('mousedown', onMainPinMouseDown);
+  mainPin.removeEventListener('keydown', onMainPinEnterPress);
+};
 
-mainPin.addEventListener('keydown', function (evt) {
+var onMainPinEnterPress = function (evt) {
   if (isEnterKey(evt)) {
     activatePage();
+    mainPin.removeEventListener('mousedown', onMainPinMouseDown);
+    mainPin.removeEventListener('keydown', onMainPinEnterPress);
   }
-});
-
-var mainPinX = Math.floor(parseInt(mainPin.style.left, 10));
-var mainPinY = Math.floor(parseInt(mainPin.style.top, 10));
-
-var mainPinLocation = {
-  x: mainPinX,
-  y: mainPinY
 };
-
-var fillAddressDisable = function () {
-  addressInput.value = (mainPinLocation.x + MainPinSize.RADIUS) + ', ' + (mainPinLocation.y + MainPinSize.HALF_HEIGHT);
-};
-
-var fillAddressActivate = function () {
-  addressInput.value = (mainPinLocation.x + MainPinSize.RADIUS) + ', ' + (mainPinLocation.y + MainPinSize.HEIGHT);
-};
-
-
-blockPage();
 
 // 8.3 Непростая валидация
 var roomsSelect = advertForm.querySelector('#room_number');
@@ -289,3 +274,5 @@ var onRoomChange = function (evt) {
 roomsSelect.addEventListener('change', onRoomChange);
 
 syncCapacity(getRoomValue(roomsSelect.selectedIndex));
+
+deactivatePage();
