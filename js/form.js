@@ -3,7 +3,7 @@
 (function () {
   var setFormLock = function (locked) {
     window.domRef.advertFormParts.forEach(locked ? window.util.setDisabled : window.util.deleteDisabled);
-    window.domRef.advertForm.classList[locked ? 'add' : 'remove'](window.util.Style.DISABLED);
+    window.domRef.advertForm.classList[locked ? 'add' : 'remove'](window.util.disabled);
     window.domRef.filterFormList.forEach(locked ? window.util.setDisabled : window.util.deleteDisabled);
   };
 

@@ -27,8 +27,8 @@
 
   var activatePage = function () {
     window.form.setLock(false);
-    window.domRef.map.classList.remove(window.util.Style.FADE);
-    window.domRef.advertForm.classList.remove(window.util.Style.DISABLED);
+    window.domRef.map.classList.remove(window.util.fade);
+    window.domRef.advertForm.classList.remove(window.util.disabled);
     renderAddress(getMainPinLocation(MainPinSize.HEIGHT));
   };
 

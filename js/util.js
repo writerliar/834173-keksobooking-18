@@ -40,7 +40,8 @@
 
   window.util = {
     MapRect: MapRect,
-    Style: Style,
+    disabled: Style.DISABLED,
+    fade: Style.FADE,
     showElement: showElement,
     hideElement: hideElement,
     setDisabled: setDisabled,
