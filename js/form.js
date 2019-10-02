@@ -55,6 +55,6 @@
   syncCapacity(getRoomValue(window.domRef.roomsSelect.selectedIndex));
 
   window.form = {
-    setFormLock: setFormLock
+    setLock: setFormLock
   };
 })();

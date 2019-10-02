@@ -19,21 +19,17 @@
   };
 
   var deactivatePage = function () {
-    window.form.setFormLock(true);
+    window.form.setLock(true);
     renderAddress(getMainPinLocation(MainPinSize.RADIUS));
     window.domRef.mainPin.addEventListener('mousedown', onMainPinMouseDown);
     window.domRef.mainPin.addEventListener('keydown', onMainPinEnterPress);
   };
 
   var activatePage = function () {
-    window.form.setFormLock(false);
+    window.form.setLock(false);
     window.domRef.map.classList.remove(window.util.Style.FADE);
     window.domRef.advertForm.classList.remove(window.util.Style.DISABLED);
     renderAddress(getMainPinLocation(MainPinSize.HEIGHT));
-  };
-
-  var isEnterKey = function (evt) {
-    return evt.key === window.util.KeyboardKey.ENTER;
   };
 
   var onMainPinMouseDown = function () {
@@ -43,7 +39,7 @@
   };
 
   var onMainPinEnterPress = function (evt) {
-    if (isEnterKey(evt)) {
+    if (window.util.isEnterKey(evt)) {
       activatePage();
       window.domRef.mainPin.removeEventListener('mousedown', onMainPinMouseDown);
       window.domRef.mainPin.removeEventListener('keydown', onMainPinEnterPress);
