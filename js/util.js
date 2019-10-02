@@ -72,5 +72,5 @@
     KeyboardKey: KeyboardKey,
     setDisabled: setDisabled,
     deleteDisabled: deleteDisabled
-  }
+  };
 })();

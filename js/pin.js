@@ -1,8 +1,6 @@
 'use strict';
 
-(function() {
-  'use strict';
-
+(function () {
   var MAX_ADVERTS = 8;
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var CHECKIN_TIME = ['12:00', '13:00', '14:00'];

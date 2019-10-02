@@ -25,5 +25,5 @@
     roomsSelect: roomsSelect,
     capacitySelect: capacitySelect,
     capacityList: capacityList
-  }
+  };
 })();

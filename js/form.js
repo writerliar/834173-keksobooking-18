@@ -56,5 +56,5 @@
 
   window.form = {
     setFormLock: setFormLock
-  }
+  };
 })();
