@@ -29,5 +29,15 @@
     window.domRef.pinContainer.appendChild(fragment);
   };
 
-  addAdverts(window.mock.generateAdverts(window.mock.MAX_ADVERTS));
+  var onError = function () {
+    var errorMessage = window.domRef.errorTemplate.cloneNode(true);
+
+    window.domRef.mainContent.appendChild(errorMessage);
+  };
+
+  var onSuccess = function(adverts) {
+    addAdverts(adverts);
+  };
+
+  window.load(onSuccess, onError);
 })();
