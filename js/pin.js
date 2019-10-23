@@ -35,7 +35,7 @@
     window.domRef.mainContent.appendChild(errorMessage);
   };
 
-  var onSuccess = function(adverts) {
+  var onSuccess = function (adverts) {
     addAdverts(adverts);
   };
 
