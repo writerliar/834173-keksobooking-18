@@ -23,6 +23,7 @@
     renderAddress(getMainPinLocation(MainPinSize.RADIUS));
     window.domRef.mainPin.addEventListener('mousedown', onMainPinMouseDown);
     window.domRef.mainPin.addEventListener('keydown', onMainPinEnterPress);
+    window.domRef.filterFormList.forEach(window.util.setDisabled);
   };
 
   var activatePage = function () {
@@ -30,6 +31,8 @@
     window.domRef.map.classList.remove(window.util.fade);
     window.domRef.advertForm.classList.remove(window.util.disabled);
     renderAddress(getMainPinLocation(MainPinSize.HEIGHT));
+
+    window.load(window.pin.onDataLoad, window.pin.onDataLoadError);
   };
 
   var onMainPinMouseDown = function () {

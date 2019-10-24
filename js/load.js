@@ -2,16 +2,21 @@
 
 (function () {
   var URL = 'https://js.dump.academy/keksobooking/data';
+  // var URL = 'https://js.dump.academy/keksobooking/data2';
+
+  var Status = {
+    OK: 200
+  };
 
   window.load = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === Status.OK) {
         onSuccess(xhr.response);
       } else {
-        onError();
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 

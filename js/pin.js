@@ -29,15 +29,17 @@
     window.domRef.pinContainer.appendChild(fragment);
   };
 
-  var onError = function () {
-    var errorMessage = window.domRef.errorTemplate.cloneNode(true);
-
-    window.domRef.mainContent.appendChild(errorMessage);
+  var onDataLoadError = function () {
+    window.domRef.mainContent.appendChild(window.error.addError);
   };
 
-  var onSuccess = function (adverts) {
+  var onDataLoad = function (adverts) {
     addAdverts(adverts);
+    window.domRef.filterFormList.forEach(window.util.deleteDisabled);
   };
 
-  window.load(onSuccess, onError);
+  window.pin = {
+    onDataLoadError: onDataLoadError,
+    onDataLoad: onDataLoad
+  };
 })();
