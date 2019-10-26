@@ -41,6 +41,10 @@
     element.classList.add(Style.HIDE);
   };
 
+  var deleteElement = function (element) {
+    element.remove();
+  };
+
   var setDisabled = function (element) {
     element.disabled = true;
   };
@@ -58,6 +62,12 @@
     setDisabled: setDisabled,
     deleteDisabled: deleteDisabled,
     isEnterKey: isEnterKey,
-    isEscapeKey: isEscapeKey
+    isEscapeKey: isEscapeKey,
+    isEscapeEvent: function (evt, action) {
+      if (isEscapeKey(evt)) {
+        action();
+      }
+    },
+    deleteElement: deleteElement
   };
 })();

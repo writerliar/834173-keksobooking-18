@@ -29,8 +29,14 @@
     window.domRef.pinContainer.appendChild(fragment);
   };
 
-  var onDataLoadError = function () {
+  var onDataLoadError = function (message) {
     window.domRef.mainContent.appendChild(window.error.addError);
+
+    var errorText = document.querySelector('.error__message');
+
+    errorText.textContent = message;
+
+    window.error.deleteError();
   };
 
   var onDataLoad = function (adverts) {

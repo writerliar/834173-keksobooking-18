@@ -3,13 +3,40 @@
 (function () {
   var errorMessage = window.domRef.errorTemplate.cloneNode(true);
 
-  var errorBlock = document.querySelector('.error');
+  var deleteError = function () {
 
-  //клик на кнопку закрывает окно
-  // и нажание на эскапе
-  // и на произвольную область
+    var errorBlock = document.querySelector('.error');
+
+    if (errorBlock) {
+      var deleteErrorBlock = function () {
+        window.util.deleteElement(errorBlock);
+      };
+
+      var errorButton = errorBlock.querySelector('.error__button');
+
+      errorButton.addEventListener('click', function () {
+        deleteErrorBlock();
+      });
+
+      var onDeleteEscapePress = function (evt) {
+        window.util.isEscapeEvent(evt, deleteErrorBlock);
+      };
+
+      document.addEventListener('keydown', onDeleteEscapePress);
+
+      var errorText = errorBlock.querySelector('.error__message');
+
+      errorBlock.addEventListener('click', function (evt) {
+        if (evt.target !== errorText) {
+          deleteErrorBlock();
+        }
+      });
+    }
+
+  };
 
   window.error = {
-    addError: errorMessage
-  }
+    addError: errorMessage,
+    deleteError: deleteError
+  };
 })();
