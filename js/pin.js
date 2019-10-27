@@ -30,7 +30,9 @@
   };
 
   var onDataLoadError = function (message) {
-    window.domRef.mainContent.appendChild(window.error.addError);
+    var errorMessage = window.domRef.errorTemplate.cloneNode(true);
+
+    window.domRef.mainContent.appendChild(errorMessage);
 
     var errorText = document.querySelector('.error__message');
 

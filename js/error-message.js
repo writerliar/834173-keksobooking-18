@@ -1,30 +1,33 @@
 'use strict';
 
 (function () {
-  var errorMessage = window.domRef.errorTemplate.cloneNode(true);
 
   var deleteError = function () {
 
     var errorBlock = document.querySelector('.error');
 
     if (errorBlock) {
+      var errorButton = errorBlock.querySelector('.error__button');
+      var errorText = errorBlock.querySelector('.error__message');
+
       var deleteErrorBlock = function () {
         window.util.deleteElement(errorBlock);
+        document.removeEventListener('keydown', onErrorEscapePress);
       };
 
-      var errorButton = errorBlock.querySelector('.error__button');
-
-      errorButton.addEventListener('click', function () {
-        deleteErrorBlock();
-      });
-
-      var onDeleteEscapePress = function (evt) {
+      var onErrorEscapePress = function (evt) {
+        evt.preventDefault();
         window.util.isEscapeEvent(evt, deleteErrorBlock);
       };
 
-      document.addEventListener('keydown', onDeleteEscapePress);
+      var onErrorButtonClick = function (evt) {
+        evt.preventDefault();
+        deleteErrorBlock();
+      };
 
-      var errorText = errorBlock.querySelector('.error__message');
+      errorButton.addEventListener('click', onErrorButtonClick);
+
+      document.addEventListener('keydown', onErrorEscapePress);
 
       errorBlock.addEventListener('click', function (evt) {
         if (evt.target !== errorText) {
@@ -36,7 +39,6 @@
   };
 
   window.error = {
-    addError: errorMessage,
     deleteError: deleteError
   };
 })();
