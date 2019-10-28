@@ -30,15 +30,7 @@
   };
 
   var onDataLoadError = function (message) {
-    var errorMessage = window.domRef.errorTemplate.cloneNode(true);
-
-    window.domRef.mainContent.appendChild(errorMessage);
-
-    var errorText = document.querySelector('.error__message');
-
-    errorText.textContent = message;
-
-    window.error.deleteError();
+    window.message.showError(message);
   };
 
   var onDataLoad = function (adverts) {

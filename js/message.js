@@ -2,13 +2,18 @@
 
 (function () {
 
-  var deleteError = function () {
+  var showError = function (message) {
+    var errorMessage = window.domRef.errorTemplate.cloneNode(true);
+
+    window.domRef.mainContent.appendChild(errorMessage);
 
     var errorBlock = document.querySelector('.error');
+    var errorText = errorBlock.querySelector('.error__message');
+
+    errorText.textContent = message;
 
     if (errorBlock) {
       var errorButton = errorBlock.querySelector('.error__button');
-      var errorText = errorBlock.querySelector('.error__message');
 
       var deleteErrorBlock = function () {
         window.util.deleteElement(errorBlock);
@@ -38,7 +43,7 @@
 
   };
 
-  window.error = {
-    deleteError: deleteError
+  window.message = {
+    showError: showError
   };
 })();
