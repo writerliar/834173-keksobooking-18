@@ -15,11 +15,22 @@
   };
 
   var KeyboardKey = {
-    ENTER: 'Enter'
+    ENTER: 'Enter',
+    ESCAPE: 'Esc',
+    ESCAPE_IE: 'Escape',
   };
+
+  var ESCAPE_KEYS = [
+    KeyboardKey.ESCAPE,
+    KeyboardKey.ESCAPE_IE,
+  ];
 
   var isEnterKey = function (evt) {
     return evt.key === KeyboardKey.ENTER;
+  };
+
+  var isEscapeKey = function (evt) {
+    return ESCAPE_KEYS.indexOf(evt.key) > -1;
   };
 
   var showElement = function (element) {
@@ -28,6 +39,10 @@
 
   var hideElement = function (element) {
     element.classList.add(Style.HIDE);
+  };
+
+  var deleteElement = function (element) {
+    element.remove();
   };
 
   var setDisabled = function (element) {
@@ -46,6 +61,13 @@
     hideElement: hideElement,
     setDisabled: setDisabled,
     deleteDisabled: deleteDisabled,
-    isEnterKey: isEnterKey
+    isEnterKey: isEnterKey,
+    isEscapeKey: isEscapeKey,
+    isEscapeEvent: function (evt, action) {
+      if (isEscapeKey(evt)) {
+        action();
+      }
+    },
+    deleteElement: deleteElement
   };
 })();

@@ -12,6 +12,8 @@
   var roomsSelect = advertForm.querySelector('#room_number');
   var capacitySelect = advertForm.querySelector('#capacity');
   var capacityList = capacitySelect.querySelectorAll('option');
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var mainContent = document.querySelector('main');
 
   window.domRef = {
     map: map,
@@ -24,6 +26,8 @@
     addressInput: addressInput,
     roomsSelect: roomsSelect,
     capacitySelect: capacitySelect,
-    capacityList: capacityList
+    capacityList: capacityList,
+    errorTemplate: errorTemplate,
+    mainContent: mainContent
   };
 })();
