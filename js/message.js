@@ -7,39 +7,36 @@
 
     window.domRef.mainContent.appendChild(errorMessage);
 
-    var errorBlock = document.querySelector('.error');
-    var errorText = errorBlock.querySelector('.error__message');
+    var errorText = errorMessage.querySelector('.error__message');
 
     errorText.textContent = message;
 
-    if (errorBlock) {
-      var errorButton = errorBlock.querySelector('.error__button');
+    var errorButton = errorMessage.querySelector('.error__button');
 
-      var deleteErrorBlock = function () {
-        window.util.deleteElement(errorBlock);
-        document.removeEventListener('keydown', onErrorEscapePress);
-      };
+    var deleteErrorBlock = function () {
+      window.util.deleteElement(errorMessage);
+      document.removeEventListener('keydown', onErrorEscapePress);
+    };
 
-      var onErrorEscapePress = function (evt) {
-        evt.preventDefault();
-        window.util.isEscapeEvent(evt, deleteErrorBlock);
-      };
+    var onErrorEscapePress = function (evt) {
+      evt.preventDefault();
+      window.util.isEscapeEvent(evt, deleteErrorBlock);
+    };
 
-      var onErrorButtonClick = function (evt) {
-        evt.preventDefault();
+    var onErrorButtonClick = function (evt) {
+      evt.preventDefault();
+      deleteErrorBlock();
+    };
+
+    errorButton.addEventListener('click', onErrorButtonClick);
+
+    document.addEventListener('keydown', onErrorEscapePress);
+
+    errorMessage.addEventListener('click', function (evt) {
+      if (evt.target !== errorText) {
         deleteErrorBlock();
-      };
-
-      errorButton.addEventListener('click', onErrorButtonClick);
-
-      document.addEventListener('keydown', onErrorEscapePress);
-
-      errorBlock.addEventListener('click', function (evt) {
-        if (evt.target !== errorText) {
-          deleteErrorBlock();
-        }
-      });
-    }
+      }
+    });
 
   };
 
