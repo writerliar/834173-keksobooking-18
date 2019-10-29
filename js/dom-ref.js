@@ -7,13 +7,16 @@
   var advertForm = document.querySelector('.ad-form');
   var advertFormParts = advertForm.querySelectorAll('fieldset');
   var filterFormList = map.querySelectorAll('.map__filter, .map__checkbox');
-  var mainPin = document.querySelector('.map__pin--main');
   var addressInput = advertForm.querySelector('#address');
   var roomsSelect = advertForm.querySelector('#room_number');
   var capacitySelect = advertForm.querySelector('#capacity');
   var capacityList = capacitySelect.querySelectorAll('option');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
   var mainContent = document.querySelector('main');
+  var mainPin = document.querySelector('.map__pin--main');
+  var filterAdverts = map.querySelector('.map__filters');
+  var filterOfType = filterAdverts.querySelector('#housing-type');
+  var filterOfTypeList = filterOfType.querySelectorAll('option');
 
   window.domRef = {
     map: map,
@@ -28,6 +31,8 @@
     capacitySelect: capacitySelect,
     capacityList: capacityList,
     errorTemplate: errorTemplate,
-    mainContent: mainContent
+    mainContent: mainContent,
+    filterOfType: filterOfType,
+    filterOfTypeList: filterOfTypeList
   };
 })();

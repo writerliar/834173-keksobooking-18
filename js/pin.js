@@ -7,6 +7,8 @@
     RADIUS: 25
   };
 
+  var MAX_ADVERTS = 5;
+
   var renderAdvert = function (advert) {
     var pin = window.domRef.pinAdvertTemplate.cloneNode(true);
     var pinImage = pin.querySelector('img');
@@ -22,9 +24,11 @@
   var addAdverts = function (adverts) {
     var fragment = document.createDocumentFragment();
 
-    adverts.forEach(function (advert) {
-      fragment.appendChild(renderAdvert(advert));
-    });
+    var stopNumber = adverts.length >= MAX_ADVERTS ? MAX_ADVERTS : adverts.length;
+
+    for (var i = 0; i < stopNumber; i++) {
+      fragment.appendChild(renderAdvert(adverts[i]));
+    }
 
     window.domRef.pinContainer.appendChild(fragment);
   };
@@ -33,13 +37,17 @@
     window.message.showError(message);
   };
 
-  var onDataLoad = function (adverts) {
-    addAdverts(adverts);
+  var adverts = [];
+
+  var onDataLoad = function (data) {
+    adverts = data;
     window.domRef.filterFormList.forEach(window.util.deleteDisabled);
+    window.filter.filterAdverts(adverts);
   };
 
   window.pin = {
     onDataLoadError: onDataLoadError,
-    onDataLoad: onDataLoad
+    onDataLoad: onDataLoad,
+    addAdverts: addAdverts
   };
 })();

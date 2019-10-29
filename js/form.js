@@ -14,6 +14,7 @@
   };
 
   var capacityToIndex = {};
+
   window.domRef.capacityList.forEach(function (option) {
     capacityToIndex[option.value] = option.index;
   });
