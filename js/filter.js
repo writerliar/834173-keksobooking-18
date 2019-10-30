@@ -9,19 +9,50 @@
     var typeOfHousing;
     var sameTypeOfHousing;
 
-    window.domRef.filterOfType.addEventListener('change', function () {
+    var advertsCopy = adverts.slice();
+
+    var clearAdverts = function (array) {
+      for (var i = array.length; i > 0; i--) {
+        array.pop();
+      }
+    };
+
+    var excludeMainPin = function (pins) {
+      pins.shift();
+    };
+
+    window.domRef.filterOfType.addEventListener('change', window.debounce(function () {
       typeOfHousing = getTypeValue(window.domRef.filterOfType.selectedIndex);
 
       sameTypeOfHousing = adverts.filter(function (advert) {
         return advert.offer.type === typeOfHousing;
       });
 
-      window.pin.addAdverts(sameTypeOfHousing);
-      // console.log(typeOfHousing);
-      // console.log(sameTypeOfHousing);
-    });
+      var pins = window.domRef.pinContainer.querySelectorAll('.map__pin');
+      var pinsArray = Array.from(pins);
 
-    window.pin.addAdverts(adverts);
+      excludeMainPin(pinsArray);
+
+      pinsArray.forEach(function (pin) {
+        window.util.deleteElement(pin);
+      });
+
+      clearAdverts(advertsCopy);
+
+      if (typeOfHousing === 'any') {
+        adverts.forEach(function (advert) {
+          advertsCopy.push(advert);
+        });
+      } else {
+        sameTypeOfHousing.forEach(function (type) {
+          advertsCopy.push(type);
+        });
+      }
+
+      window.pin.addAdverts(advertsCopy);
+    }));
+
+    window.pin.addAdverts(advertsCopy);
   };
 
   window.filter = {
