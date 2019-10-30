@@ -1,4 +1,4 @@
-'use script';
+'use strict';
 
 (function () {
   var renderAdvertPopup = function (advert) {
@@ -9,7 +9,7 @@
       palace: 'Дворец'
     };
 
-    var getAdvertType = function (advert) {
+    var getAdvertType = function () {
       return advertTypeEnToRus[advert.offer.type];
     };
 
@@ -26,6 +26,7 @@
     var popupPhotos = popup.querySelector('.popup__photos');
 
     var advertFeatures = advert.offer.features;
+    var advertPhotos = advert.offer.photos;
 
     popupImg.src = advert.author.avatar;
     popupImg.alt = advert.offer.title;
@@ -36,11 +37,14 @@
     popupCapacity.textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
     popupTime.textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
     popupDesc.textContent = advert.offer.description;
-    popupPhotos.innerHTML = 'здесь фотки';
 
-    advertFeatures.forEach(function (feature) {
-      popupFeatures.innerHTML = '<li class="feature feature--' + feature + '"></li>';
-    });
+    popupFeatures.innerHTML = advertFeatures.map(function (feature) {
+      return '<li class="popup__feature popup__feature--' + feature + '"></li>';
+    }).join(' ');
+
+    popupPhotos.innerHTML = advertPhotos.map(function (photo) {
+      return '<img class="popup__photo" src="' + photo + '" alt="" style="height: 40px;">';
+    }).join(' ');
 
     return popup;
   };

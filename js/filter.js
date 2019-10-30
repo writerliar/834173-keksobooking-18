@@ -10,7 +10,6 @@
     var sameTypeOfHousing;
 
     var advertsCopy = adverts.slice();
-    console.log(adverts);
 
     var clearAdverts = function (array) {
       for (var i = array.length; i > 0; i--) {
