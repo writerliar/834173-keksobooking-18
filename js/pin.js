@@ -43,6 +43,8 @@
     adverts = data;
     window.domRef.filterFormList.forEach(window.util.deleteDisabled);
     window.filter.filterAdverts(adverts);
+    //пока временно генерирую картчоку при загрузке. Потом перенесу вызов на клик на пин
+    window.card.addAdvertPopup(adverts);
   };
 
   window.pin = {

@@ -17,6 +17,8 @@
   var filterAdverts = map.querySelector('.map__filters');
   var filterOfType = filterAdverts.querySelector('#housing-type');
   var filterOfTypeList = filterOfType.querySelectorAll('option');
+  var pinCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+  var filterContainer = map.querySelector('.map__filters-container');
 
   window.domRef = {
     map: map,
@@ -33,6 +35,8 @@
     errorTemplate: errorTemplate,
     mainContent: mainContent,
     filterOfType: filterOfType,
-    filterOfTypeList: filterOfTypeList
+    filterOfTypeList: filterOfTypeList,
+    pinCardTemplate: pinCardTemplate,
+    filterContainer: filterContainer
   };
 })();
