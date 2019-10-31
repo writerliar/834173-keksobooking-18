@@ -1,9 +1,10 @@
 'use strict';
 
 (function () {
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var showError = function (message) {
-    var errorMessage = window.domRef.errorTemplate.cloneNode(true);
+    var errorMessage = errorTemplate.cloneNode(true);
 
     window.domRef.mainContent.appendChild(errorMessage);
 
@@ -14,7 +15,7 @@
     var errorButton = errorMessage.querySelector('.error__button');
 
     var deleteErrorBlock = function () {
-      window.util.deleteElement(errorMessage);
+      window.util.removeElement(errorMessage);
       document.removeEventListener('keydown', onErrorEscapePress);
     };
 

@@ -7,9 +7,7 @@
     RADIUS: 25
   };
 
-  var MAX_ADVERTS = 5;
-
-  var renderAdvert = function (advert) {
+  var renderPin = function (advert) {
     var pin = window.domRef.pinAdvertTemplate.cloneNode(true);
     var pinImage = pin.querySelector('img');
 
@@ -18,37 +16,51 @@
     pin.style.left = advert.location.x - PinSize.RADIUS + 'px';
     pin.style.top = advert.location.y - PinSize.HEIGHT + 'px';
 
+    pin.addEventListener('click', function () {
+      var cardPopup = document.querySelector('.map__card');
+
+      pin.classList.add('main__pin--active');
+
+      if (cardPopup === null) {
+        window.card.show(advert);
+      } else {
+        window.card.remove();
+        window.card.show(advert);
+      }
+    });
+
     return pin;
   };
 
   var addAdverts = function (adverts) {
     var fragment = document.createDocumentFragment();
 
-    var stopNumber = adverts.length >= MAX_ADVERTS ? MAX_ADVERTS : adverts.length;
-
-    for (var i = 0; i < stopNumber; i++) {
-      fragment.appendChild(renderAdvert(adverts[i]));
-    }
+    adverts.forEach(function (advert) {
+      fragment.appendChild(renderPin(advert));
+    });
 
     window.domRef.pinContainer.appendChild(fragment);
+  };
+
+  var deletePins = function () {
+    var pins = window.domRef.pinContainer.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    pins.forEach(window.util.removeElement);
+  };
+
+  var onDataLoad = function (data) {
+    window.pin.adverts = data;
+    window.filter.activate();
   };
 
   var onDataLoadError = function (message) {
     window.message.showError(message);
   };
 
-  var adverts = [];
-
-  var onDataLoad = function (data) {
-    adverts = data;
-    window.domRef.filterFormList.forEach(window.util.deleteDisabled);
-    window.filter.filterAdverts(adverts);
-    window.card.addAdvertPopup(adverts);
-  };
-
   window.pin = {
     onDataLoadError: onDataLoadError,
     onDataLoad: onDataLoad,
-    addAdverts: addAdverts
+    add: addAdverts,
+    delete: deletePins
   };
 })();

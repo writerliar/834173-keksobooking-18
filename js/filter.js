@@ -1,61 +1,45 @@
 'use strict';
 
 (function () {
-  var filterAdverts = function (adverts) {
-    var getTypeValue = function (idx) {
-      return window.domRef.filterOfType.options[idx].value;
-    };
+  var filterAdverts = document.querySelector('.map__filters');
+  var typeSelector = filterAdverts.querySelector('#housing-type');
+  var filterFormList = document.querySelectorAll('.map__filter, .map__checkbox');
 
-    var typeOfHousing;
-    var sameTypeOfHousing;
+  var PIN_COUNT = 5;
 
-    var advertsCopy = adverts.slice();
-
-    var clearAdverts = function (array) {
-      for (var i = array.length; i > 0; i--) {
-        array.pop();
-      }
-    };
-
-    var excludeMainPin = function (pins) {
-      pins.shift();
-    };
-
-    window.domRef.filterOfType.addEventListener('change', window.debounce(function () {
-      typeOfHousing = getTypeValue(window.domRef.filterOfType.selectedIndex);
-
-      sameTypeOfHousing = adverts.filter(function (advert) {
-        return advert.offer.type === typeOfHousing;
-      });
-
-      var pins = window.domRef.pinContainer.querySelectorAll('.map__pin');
-      var pinsArray = Array.from(pins);
-
-      excludeMainPin(pinsArray);
-
-      pinsArray.forEach(function (pin) {
-        window.util.deleteElement(pin);
-      });
-
-      clearAdverts(advertsCopy);
-
-      if (typeOfHousing === 'any') {
-        adverts.forEach(function (advert) {
-          advertsCopy.push(advert);
-        });
-      } else {
-        sameTypeOfHousing.forEach(function (type) {
-          advertsCopy.push(type);
-        });
-      }
-
-      window.pin.addAdverts(advertsCopy);
-    }));
-
-    window.pin.addAdverts(advertsCopy);
+  var activateFilter = function () {
+    filterFormList.forEach(window.util.resetDisabled);
   };
 
+  var deactivateFilter = function () {
+    filterFormList.forEach(window.util.setDisabled);
+  };
+
+  var getTypeValue = function () {
+    return typeSelector.value;
+  };
+
+  var filterType = function (adverts) {
+    if (getTypeValue() === 'any') {
+      return adverts.slice(0, PIN_COUNT);
+    } else {
+      return adverts.filter(function (advert) {
+        return advert.offer.type === getTypeValue();
+      }).slice(0, PIN_COUNT);
+    }
+  };
+
+  var onFilterChange = function () {
+    var filteredAdverts = filterType(window.pin.adverts);
+
+    window.pin.delete();
+    window.pin.add(filteredAdverts);
+  };
+
+  filterAdverts.addEventListener('change', window.debounce(onFilterChange));
+
   window.filter = {
-    filterAdverts: filterAdverts
+    activate: activateFilter,
+    deactivate: deactivateFilter
   };
 })();

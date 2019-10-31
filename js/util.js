@@ -41,7 +41,7 @@
     element.classList.add(Style.HIDE);
   };
 
-  var deleteElement = function (element) {
+  var removeElement = function (element) {
     element.remove();
   };
 
@@ -49,7 +49,7 @@
     element.disabled = true;
   };
 
-  var deleteDisabled = function (element) {
+  var resetDisabled = function (element) {
     element.disabled = false;
   };
 
@@ -60,7 +60,7 @@
     showElement: showElement,
     hideElement: hideElement,
     setDisabled: setDisabled,
-    deleteDisabled: deleteDisabled,
+    resetDisabled: resetDisabled,
     isEnterKey: isEnterKey,
     isEscapeKey: isEscapeKey,
     isEscapeEvent: function (evt, action) {
@@ -68,6 +68,6 @@
         action();
       }
     },
-    deleteElement: deleteElement
+    removeElement: removeElement
   };
 })();
