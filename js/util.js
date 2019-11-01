@@ -41,17 +41,34 @@
     element.classList.add(Style.HIDE);
   };
 
-  var deleteElement = function (element) {
-    element.remove();
+  var removeElement = function (element) {
+    if (element) {
+      element.remove();
+    }
   };
 
   var setDisabled = function (element) {
     element.disabled = true;
   };
 
-  var deleteDisabled = function (element) {
+  var unsetDisabled = function (element) {
     element.disabled = false;
   };
+
+  var isEscapeEvent = function (evt, action) {
+    if (isEscapeKey(evt)) {
+      action();
+    }
+  };
+
+  var isEnterEvent = function (evt, action) {
+    if (isEnterKey(evt)) {
+      action();
+    }
+  };
+
+  // no operation
+  var noop = function () {};
 
   window.util = {
     MapRect: MapRect,
@@ -60,14 +77,12 @@
     showElement: showElement,
     hideElement: hideElement,
     setDisabled: setDisabled,
-    deleteDisabled: deleteDisabled,
+    unsetDisabled: unsetDisabled,
     isEnterKey: isEnterKey,
     isEscapeKey: isEscapeKey,
-    isEscapeEvent: function (evt, action) {
-      if (isEscapeKey(evt)) {
-        action();
-      }
-    },
-    deleteElement: deleteElement
+    isEscapeEvent: isEscapeEvent,
+    isEnterEvent: isEnterEvent,
+    removeElement: removeElement,
+    noop: noop,
   };
 })();

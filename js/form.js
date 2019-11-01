@@ -1,9 +1,17 @@
 'use strict';
 
 (function () {
+  var advertForm = document.querySelector('.ad-form');
+  var advertFormParts = advertForm.querySelectorAll('fieldset');
+
+  var addressInput = advertForm.querySelector('#address');
+  var roomsSelect = advertForm.querySelector('#room_number');
+  var capacitySelect = advertForm.querySelector('#capacity');
+  var capacityList = capacitySelect.querySelectorAll('option');
+
   var setFormLock = function (locked) {
-    window.domRef.advertFormParts.forEach(locked ? window.util.setDisabled : window.util.deleteDisabled);
-    window.domRef.advertForm.classList[locked ? 'add' : 'remove'](window.util.disabled);
+    advertFormParts.forEach(locked ? window.util.setDisabled : window.util.unsetDisabled);
+    advertForm.classList[locked ? 'add' : 'remove'](window.util.disabled);
   };
 
   var roomToCapacity = {
@@ -14,12 +22,13 @@
   };
 
   var capacityToIndex = {};
-  window.domRef.capacityList.forEach(function (option) {
+
+  capacityList.forEach(function (option) {
     capacityToIndex[option.value] = option.index;
   });
 
   var isNotSelected = function (options) {
-    var selected = +window.domRef.capacityList[window.domRef.capacitySelect.selectedIndex].value;
+    var selected = +capacityList[capacitySelect.selectedIndex].value;
 
     return options.indexOf(selected) === -1;
   };
@@ -29,17 +38,17 @@
   };
 
   var getRoomValue = function (idx) {
-    return window.domRef.roomsSelect.options[idx].value;
+    return roomsSelect.options[idx].value;
   };
 
   var syncCapacity = function (roomsQuantity) {
     var options = roomToCapacity[roomsQuantity];
 
     if (isNotSelected(options)) {
-      window.domRef.capacitySelect.selectedIndex = getCapacityIndex(options);
+      capacitySelect.selectedIndex = getCapacityIndex(options);
     }
 
-    window.domRef.capacityList.forEach(function (option) {
+    capacityList.forEach(function (option) {
       var hasOption = options.indexOf(+option.value) > -1;
       (hasOption ? window.util.showElement : window.util.hideElement)(option);
     });
@@ -49,11 +58,13 @@
     syncCapacity(evt.target.value);
   };
 
-  window.domRef.roomsSelect.addEventListener('change', onRoomChange);
+  roomsSelect.addEventListener('change', onRoomChange);
 
-  syncCapacity(getRoomValue(window.domRef.roomsSelect.selectedIndex));
+  syncCapacity(getRoomValue(roomsSelect.selectedIndex));
 
   window.form = {
-    setLock: setFormLock
+    setLock: setFormLock,
+    newAdvert: advertForm,
+    addressInput: addressInput
   };
 })();
