@@ -42,8 +42,7 @@
   };
 
   var removeElement = function (element) {
-
-    if (element !== null) {
+    if (element) {
       element.remove();
     }
   };

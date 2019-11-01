@@ -15,40 +15,42 @@
     filterFormList.forEach(window.util.setDisabled);
   };
 
-  // var filterType = function (advert) {
-  //   return typeSelector.value === 'any'
-  //     || typeSelector.value === advert.offer.value;
-  // };
-  //
-  // var filterAdvert = function (advert) {
-  //   return filterType(advert);
-  // };
-  //
-  // var updateFilter = function () {
-  //   var filteredAdverts = window.pin.adverts
-  //     .filter(filterAdvert())
-  //     .slice(0, PIN_COUNT);
-  //
-  //   window.pin.delete();
-  //   window.pin.add(filteredAdverts);
+  // var filterType = function (adverts) {
+  //   if (typeSelector.value === 'any') {
+  //     return adverts.slice(0, PIN_COUNT);
+  //   } else {
+  //     return adverts.filter(function (advert) {
+  //       return advert.offer.type === typeSelector.value;
+  //     }).slice(0, PIN_COUNT);
+  //   }
   // };
 
-  var filterType = function (adverts) {
-    if (typeSelector.value === 'any') {
-      return adverts.slice(0, PIN_COUNT);
-    } else {
-      return adverts.filter(function (advert) {
-        return advert.offer.type === typeSelector.value;
-      }).slice(0, PIN_COUNT);
-    }
+  var filterType = function (advert) {
+    return typeSelector.value === 'any'
+      || typeSelector.value === advert.offer.value;
+  };
+
+  var filterAdvert = function (advert) {
+    return filterType(advert);
   };
 
   var updateFilter = function () {
-    var filteredAdverts = filterType(window.pin.adverts);
+    var filteredAdverts = window.pin.adverts
+      .filter(filterAdvert)
+      .slice(0, PIN_COUNT);
+
+    console.log(filteredAdverts);
 
     window.pin.delete();
     window.pin.add(filteredAdverts);
   };
+
+  // var updateFilter = function () {
+  //   var filteredAdverts = filterType(window.pin.adverts);
+  //
+  //   window.pin.delete();
+  //   window.pin.add(filteredAdverts);
+  // };
 
   var onFilterChange = function () {
     window.card.remove();
