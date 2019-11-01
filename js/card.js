@@ -71,7 +71,7 @@
   };
 
   var onCardEscapePress = function (evt) {
-    window.util.isEscapeKey(evt, removeCard);
+    window.util.isEscapeEvent(evt, removeCard);
   };
 
   var addCardListeners = function (card) {
