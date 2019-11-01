@@ -67,6 +67,9 @@
     }
   };
 
+  // no operation
+  var noop = function () {};
+
   window.util = {
     MapRect: MapRect,
     disabled: Style.DISABLED,
@@ -79,6 +82,7 @@
     isEscapeKey: isEscapeKey,
     isEscapeEvent: isEscapeEvent,
     isEnterEvent: isEnterEvent,
-    removeElement: removeElement
+    removeElement: removeElement,
+    noop: noop,
   };
 })();
