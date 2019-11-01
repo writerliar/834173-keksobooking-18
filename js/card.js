@@ -62,6 +62,7 @@
     window.util.removeElement(window.domRef.map.querySelector('.map__card'));
     document.removeEventListener('keydown', onCardEscapePress);
     window.card.onRemove();
+    window.card.onRemove = window.util.noop;
   };
 
   var onCloseButtonClick = function (evt) {
