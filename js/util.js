@@ -42,15 +42,30 @@
   };
 
   var removeElement = function (element) {
-    element.remove();
+
+    if (element !== null) {
+      element.remove();
+    }
   };
 
   var setDisabled = function (element) {
     element.disabled = true;
   };
 
-  var resetDisabled = function (element) {
+  var unsetDisabled = function (element) {
     element.disabled = false;
+  };
+
+  var isEscapeEvent = function (evt, action) {
+    if (isEscapeKey(evt)) {
+      action();
+    }
+  };
+
+  var isEnterEvent = function (evt, action) {
+    if (isEnterKey(evt)) {
+      action();
+    }
   };
 
   window.util = {
@@ -60,14 +75,11 @@
     showElement: showElement,
     hideElement: hideElement,
     setDisabled: setDisabled,
-    resetDisabled: resetDisabled,
+    unsetDisabled: unsetDisabled,
     isEnterKey: isEnterKey,
     isEscapeKey: isEscapeKey,
-    isEscapeEvent: function (evt, action) {
-      if (isEscapeKey(evt)) {
-        action();
-      }
-    },
+    isEscapeEvent: isEscapeEvent,
+    isEnterEvent: isEnterEvent,
     removeElement: removeElement
   };
 })();

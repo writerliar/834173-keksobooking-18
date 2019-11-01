@@ -17,22 +17,23 @@
     pin.style.top = advert.location.y - PinSize.HEIGHT + 'px';
 
     pin.addEventListener('click', function () {
-      var cardPopup = document.querySelector('.map__card');
+      var activePin = window.domRef.pinContainer.querySelector('.map__pin--active');
 
-      pin.classList.add('main__pin--active');
-
-      if (cardPopup === null) {
-        window.card.show(advert);
+      if (activePin === null) {
+        pin.classList.add('map__pin--active');
       } else {
-        window.card.remove();
-        window.card.show(advert);
+        activePin.classList.remove('map__pin--active');
+        pin.classList.add('map__pin--active');
       }
+
+      window.card.remove();
+      window.card.show(advert);
     });
 
     return pin;
   };
 
-  var addAdverts = function (adverts) {
+  var renderPins = function (adverts) {
     var fragment = document.createDocumentFragment();
 
     adverts.forEach(function (advert) {
@@ -51,6 +52,7 @@
   var onDataLoad = function (data) {
     window.pin.adverts = data;
     window.filter.activate();
+    window.filter.update();
   };
 
   var onDataLoadError = function (message) {
@@ -60,7 +62,7 @@
   window.pin = {
     onDataLoadError: onDataLoadError,
     onDataLoad: onDataLoad,
-    add: addAdverts,
+    add: renderPins,
     delete: deletePins
   };
 })();

@@ -10,7 +10,7 @@
   var capacityList = capacitySelect.querySelectorAll('option');
 
   var setFormLock = function (locked) {
-    advertFormParts.forEach(locked ? window.util.setDisabled : window.util.resetDisabled);
+    advertFormParts.forEach(locked ? window.util.setDisabled : window.util.unsetDisabled);
     advertForm.classList[locked ? 'add' : 'remove'](window.util.disabled);
   };
 

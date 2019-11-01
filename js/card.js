@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   var offerTypeEnToRus = {
@@ -16,7 +15,7 @@
   };
 
   var getOfferPrice = function (offer) {
-    return offer.price + '\u20bd/ночь';
+    return offer.price + ' \u20bd/ночь';
   };
 
   var getOfferCapacity = function (offer) {
@@ -27,11 +26,11 @@
     return 'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
   };
 
-  var getFeaturesMarkUp = function (feature) {
+  var getFeatureMarkup = function (feature) {
     return '<li class="popup__feature popup__feature--' + feature + '"></li>';
   };
 
-  var getPhotosMarkUp = function (photo) {
+  var getPhotoMarkup = function (photo) {
     return '<img src="' + photo + '" class="popup__photo" width="45" height="40" alt="Фотография жилья">';
   };
 
@@ -52,19 +51,51 @@
     card.querySelector('.popup__text--capacity').textContent = getOfferCapacity(offer);
     card.querySelector('.popup__text--time').textContent = getOfferTime(offer);
 
-    card.querySelector('.popup__features').innerHTML = offer.features.map(getFeaturesMarkUp).join(' ');
+    card.querySelector('.popup__features').innerHTML = offer.features.map(getFeatureMarkup).join(' ');
 
-    card.querySelector('.popup__photos').innerHTML = offer.photos.map(getPhotosMarkUp).join(' ');
+    card.querySelector('.popup__photos').innerHTML = offer.photos.map(getPhotoMarkup).join(' ');
 
     return card;
   };
 
+  var onCardEscapePress = function (evt) {
+    evt.preventDefault();
+    window.util.isEscapeEvent(evt, removeCard);
+  };
+
+  var addCardListeners = function (card) {
+    var cardClose = card.querySelector('.popup__close');
+
+    var onCardClosePress = function (evt) {
+      evt.preventDefault();
+      removeCard();
+    };
+
+    var onCardCloseEnterPress = function (evt) {
+      evt.preventDefault();
+      window.util.isEnterEvent(evt, removeCard);
+    };
+
+    cardClose.addEventListener('click', onCardClosePress);
+
+    cardClose.addEventListener('keydown', onCardCloseEnterPress);
+  };
+
   var showCard = function (advert) {
-    window.domRef.map.insertBefore(renderCard(advert), window.domRef.filterContainer);
+    var card = renderCard(advert);
+
+    addCardListeners(card);
+
+    document.addEventListener('keydown', onCardEscapePress);
+
+    window.domRef.map.insertBefore(card, window.domRef.filterContainer);
   };
 
   var removeCard = function () {
-    window.util.removeElement(document.querySelector('.map__card'));
+    var card = window.domRef.map.querySelector('.map__card');
+
+    window.util.removeElement(card);
+    document.removeEventListener('keydown', onCardEscapePress);
   };
 
   window.card = {
