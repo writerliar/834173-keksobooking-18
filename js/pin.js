@@ -7,6 +7,10 @@
     RADIUS: 25
   };
 
+  var setPinActive = function (pin, active) {
+    pin.classList[active ? 'add' : 'remove']('map__pin--active');
+  };
+
   var renderPin = function (advert) {
     var pin = window.domRef.pinAdvertTemplate.cloneNode(true);
     var pinImage = pin.querySelector('img');
@@ -17,17 +21,13 @@
     pin.style.top = advert.location.y - PinSize.HEIGHT + 'px';
 
     pin.addEventListener('click', function () {
-      var activePin = window.domRef.pinContainer.querySelector('.map__pin--active');
-
-      if (activePin === null) {
-        pin.classList.add('map__pin--active');
-      } else {
-        activePin.classList.remove('map__pin--active');
-        pin.classList.add('map__pin--active');
-      }
+      setPinActive(pin, true);
 
       window.card.remove();
       window.card.show(advert);
+      window.card.onRemove = function () {
+        setPinActive(pin, false);
+      };
     });
 
     return pin;

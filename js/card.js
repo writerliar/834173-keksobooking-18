@@ -61,6 +61,7 @@
   var removeCard = function () {
     window.util.removeElement(window.domRef.map.querySelector('.map__card'));
     document.removeEventListener('keydown', onCardEscapePress);
+    window.card.onRemove();
   };
 
   var onCloseButtonClick = function (evt) {
@@ -86,6 +87,7 @@
 
   window.card = {
     show: showCard,
-    remove: removeCard
+    remove: removeCard,
+    onRemove: window.util.noop,
   };
 })();
