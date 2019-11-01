@@ -58,44 +58,30 @@
     return card;
   };
 
-  var onCardEscapePress = function (evt) {
+  var removeCard = function () {
+    window.util.removeElement(window.domRef.map.querySelector('.map__card'));
+    document.removeEventListener('keydown', onCardEscapePress);
+  };
+
+  var onCloseButtonClick = function (evt) {
     evt.preventDefault();
+    removeCard();
+  };
+
+  var onCardEscapePress = function (evt) {
     window.util.isEscapeEvent(evt, removeCard);
   };
 
   var addCardListeners = function (card) {
-    var cardClose = card.querySelector('.popup__close');
-
-    var onCardClosePress = function (evt) {
-      evt.preventDefault();
-      removeCard();
-    };
-
-    var onCardCloseEnterPress = function (evt) {
-      evt.preventDefault();
-      window.util.isEnterEvent(evt, removeCard);
-    };
-
-    cardClose.addEventListener('click', onCardClosePress);
-
-    cardClose.addEventListener('keydown', onCardCloseEnterPress);
+    card.querySelector('.popup__close').addEventListener('click', onCloseButtonClick);
+    document.addEventListener('keydown', onCardEscapePress);
   };
 
   var showCard = function (advert) {
     var card = renderCard(advert);
-
     addCardListeners(card);
 
-    document.addEventListener('keydown', onCardEscapePress);
-
     window.domRef.map.insertBefore(card, window.domRef.filterContainer);
-  };
-
-  var removeCard = function () {
-    var card = window.domRef.map.querySelector('.map__card');
-
-    window.util.removeElement(card);
-    document.removeEventListener('keydown', onCardEscapePress);
   };
 
   window.card = {
