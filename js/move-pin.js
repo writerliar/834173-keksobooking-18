@@ -24,8 +24,29 @@
       startCoords.x = moveEvt.clientX;
       startCoords.y = moveEvt.clientY;
 
-      window.domRef.mainPin.style.top = (window.domRef.mainPin.offsetTop - shift.y) + 'px';
-      window.domRef.mainPin.style.left = (window.domRef.mainPin.offsetLeft - shift.x) + 'px';
+      var yMainPinPosition = window.domRef.mainPin.offsetTop - shift.y;
+
+      var xMainPinPosition = window.domRef.mainPin.offsetLeft - shift.x;
+
+      if (yMainPinPosition < window.util.MapRect.TOP - window.map.MainPinSize.HEIGHT) {
+        yMainPinPosition = window.util.MapRect.TOP - window.map.MainPinSize.HEIGHT;
+      }
+
+      if (yMainPinPosition > window.util.MapRect.BOTTOM - window.map.MainPinSize.HEIGHT) {
+        yMainPinPosition = window.util.MapRect.BOTTOM - window.map.MainPinSize.HEIGHT;
+      }
+
+      if (xMainPinPosition < window.util.MapRect.LEFT - window.map.MainPinSize.RADIUS) {
+        xMainPinPosition = window.util.MapRect.LEFT - window.map.MainPinSize.RADIUS;
+      }
+
+      if (xMainPinPosition > window.util.MapRect.RIGHT - window.map.MainPinSize.RADIUS) {
+        xMainPinPosition = window.util.MapRect.RIGHT - window.map.MainPinSize.RADIUS;
+      }
+
+      window.domRef.mainPin.style.top = yMainPinPosition + 'px';
+
+      window.domRef.mainPin.style.left = xMainPinPosition + 'px';
 
       renderNewAddress();
     };
