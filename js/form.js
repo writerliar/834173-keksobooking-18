@@ -3,11 +3,14 @@
 (function () {
   var advertForm = document.querySelector('.ad-form');
   var advertFormParts = advertForm.querySelectorAll('fieldset');
-
   var addressInput = advertForm.querySelector('#address');
   var roomsSelect = advertForm.querySelector('#room_number');
   var capacitySelect = advertForm.querySelector('#capacity');
   var capacityList = capacitySelect.querySelectorAll('option');
+  var timeinSelect = advertForm.querySelector('#timein');
+  var timeoutSelect = advertForm.querySelector('#timeout');
+  var typeSelect = advertForm.querySelector('#type');
+  var priceInput = advertForm.querySelector('#price');
 
   var setFormLock = function (locked) {
     advertFormParts.forEach(locked ? window.util.setDisabled : window.util.unsetDisabled);
@@ -21,31 +24,56 @@
     100: [0],
   };
 
-  var capacityToIndex = {};
+  var priceToType = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
 
-  capacityList.forEach(function (option) {
-    capacityToIndex[option.value] = option.index;
-  });
+  var timeinToTimeout = {
+    '12:00': '12:00',
+    '13:00': '13:00',
+    '14:00': '14:00'
+  };
 
-  var isNotSelected = function (options) {
-    var selected = +capacityList[capacitySelect.selectedIndex].value;
+  var valueToIndex = {};
+
+  var isNotSelected = function (options, list, select) {
+    var selected = +list[select.selectedIndex].value;
 
     return options.indexOf(selected) === -1;
   };
 
-  var getCapacityIndex = function (options) {
-    return capacityToIndex[Math.max.apply(null, options)];
+  var rewriteValueToIndex = function (list) {
+    list.forEach(function (option) {
+      valueToIndex[option.value] = option.index;
+    });
+  };
+
+  var getCriterionIndex = function (options) {
+    return valueToIndex[Math.max.apply(null, options)];
   };
 
   var getRoomValue = function (idx) {
     return roomsSelect.options[idx].value;
   };
 
+  var getTypeValue = function (idx) {
+    return typeSelect.options[idx].value;
+  };
+
+  var getTimeinValue = function (idx) {
+    return timeinSelect.options[idx].value;
+  };
+
   var syncCapacity = function (roomsQuantity) {
     var options = roomToCapacity[roomsQuantity];
 
-    if (isNotSelected(options)) {
-      capacitySelect.selectedIndex = getCapacityIndex(options);
+    rewriteValueToIndex(capacityList);
+
+    if (isNotSelected(options, capacityList, capacitySelect)) {
+      capacitySelect.selectedIndex = getCriterionIndex(options);
     }
 
     capacityList.forEach(function (option) {
@@ -54,13 +82,39 @@
     });
   };
 
+  var syncTime = function (timeout) {
+    timeoutSelect.value = timeinToTimeout[timeout];
+    timeinSelect.value = timeinToTimeout[timeout];
+  };
+
+  var syncType = function (type) {
+    var options = priceToType[type];
+
+    priceInput.min = options;
+    priceInput.placeholder = options;
+  };
+
   var onRoomChange = function (evt) {
     syncCapacity(evt.target.value);
   };
 
-  roomsSelect.addEventListener('change', onRoomChange);
+  var onTypeChange = function (evt) {
+    syncType(evt.target.value);
+  };
 
+  var onTimeChange = function (evt) {
+    syncTime(evt.target.value);
+  };
+
+  roomsSelect.addEventListener('change', onRoomChange);
   syncCapacity(getRoomValue(roomsSelect.selectedIndex));
+
+  typeSelect.addEventListener('change', onTypeChange);
+  syncType(getTypeValue(typeSelect.selectedIndex));
+
+  timeinSelect.addEventListener('change', onTimeChange);
+  timeoutSelect.addEventListener('change', onTimeChange);
+  syncTime(getTimeinValue(timeinSelect.selectedIndex));
 
   window.form = {
     setLock: setFormLock,

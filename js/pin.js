@@ -11,6 +11,10 @@
     pin.classList[active ? 'add' : 'remove']('map__pin--active');
   };
 
+  var isActivePin = function (pin) {
+    return pin.classList.contains('map__pin--active');
+  };
+
   var renderPin = function (advert) {
     var pin = window.domRef.pinAdvertTemplate.cloneNode(true);
     var pinImage = pin.querySelector('img');
@@ -21,6 +25,10 @@
     pin.style.top = advert.location.y - PinSize.HEIGHT + 'px';
 
     pin.addEventListener('click', function () {
+      if (isActivePin(pin)) {
+        return;
+      }
+
       setPinActive(pin, true);
 
       window.card.remove();
