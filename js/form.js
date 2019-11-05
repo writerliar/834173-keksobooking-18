@@ -11,6 +11,7 @@
   var timeoutSelect = advertForm.querySelector('#timeout');
   var typeSelect = advertForm.querySelector('#type');
   var priceInput = advertForm.querySelector('#price');
+  var timeField = advertForm.querySelector('.ad-form__element--time');
 
   var setFormLock = function (locked) {
     advertFormParts.forEach(locked ? window.util.setDisabled : window.util.unsetDisabled);
@@ -29,12 +30,6 @@
     flat: 1000,
     house: 5000,
     palace: 10000
-  };
-
-  var timeinToTimeout = {
-    '12:00': '12:00',
-    '13:00': '13:00',
-    '14:00': '14:00'
   };
 
   var valueToIndex = {};
@@ -63,10 +58,6 @@
     return typeSelect.options[idx].value;
   };
 
-  var getTimeinValue = function (idx) {
-    return timeinSelect.options[idx].value;
-  };
-
   var syncCapacity = function (roomsQuantity) {
     var options = roomToCapacity[roomsQuantity];
 
@@ -82,9 +73,9 @@
     });
   };
 
-  var syncTime = function (timeout) {
-    timeoutSelect.value = timeinToTimeout[timeout];
-    timeinSelect.value = timeinToTimeout[timeout];
+  var syncTime = function (time) {
+    timeoutSelect.value = time;
+    timeinSelect.value = time;
   };
 
   var syncType = function (type) {
@@ -112,9 +103,7 @@
   typeSelect.addEventListener('change', onTypeChange);
   syncType(getTypeValue(typeSelect.selectedIndex));
 
-  timeinSelect.addEventListener('change', onTimeChange);
-  timeoutSelect.addEventListener('change', onTimeChange);
-  syncTime(getTimeinValue(timeinSelect.selectedIndex));
+  timeField.addEventListener('change', onTimeChange);
 
   window.form = {
     setLock: setFormLock,

@@ -50,4 +50,10 @@
   };
 
   deactivatePage();
+
+  window.map = {
+    MainPinSize: MainPinSize,
+    renderAddress: renderAddress,
+    getMainPinLocation: getMainPinLocation
+  };
 })();
