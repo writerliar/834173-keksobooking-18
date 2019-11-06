@@ -7,9 +7,10 @@
   var typeSelector = filterAdverts.querySelector('#housing-type');
   var priceSelector = filterAdverts.querySelector('#housing-price');
   var roomsSelector = filterAdverts.querySelector('#housing-rooms');
+  var guestsSelector = filterAdverts.querySelector('#housing-guests');
   var filterFormList = document.querySelectorAll('.map__filter, .map__checkbox');
 
-  var convertLevelToPrice = function (price) {
+  var checkPrice = function (price) {
     if (price > 50000) {
       return 'high';
     }
@@ -38,18 +39,34 @@
 
   var filterPrice = function (advert) {
     return priceSelector.value === 'any'
-      || priceSelector.value === convertLevelToPrice(advert.offer.price);
+      || priceSelector.value === checkPrice(advert.offer.price);
   };
 
-  // var filterRooms = function (advert) {
-  //   return roomsSelector.value === 'any'
-  //   ||  roomsSelector.value === advert.offer.rooms;
+  var checkRooms = function (rooms) {
+    if (rooms > 3 || rooms === 0) {
+      return 'any';
+    }
+
+    if (rooms === 1 || rooms === 2 || rooms === 3) {
+      return rooms;
+    }
+  };
+
+  var filterRooms = function (advert) {
+    return roomsSelector.value === 'any'
+      || roomsSelector.value === checkRooms(advert.offer.rooms);
+  };
+
+  // var filterGuests = function (advert) {
+  //   return guestsSelector.value === 'any'
+  //     || guestsSelector.value === advert.offer.guests;
   // };
 
   var filterAdvert = function (advert) {
     return filterType(advert)
-      && filterPrice(advert);
-      // && filterRooms(advert);
+      && filterPrice(advert)
+      && filterRooms(advert);
+      // && filterGuests(advert);
   };
 
   var updateFilter = function () {
