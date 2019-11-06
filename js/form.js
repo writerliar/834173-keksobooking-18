@@ -12,7 +12,7 @@
   var typeSelect = advertForm.querySelector('#type');
   var priceInput = advertForm.querySelector('#price');
   var timeField = advertForm.querySelector('.ad-form__element--time');
-  // var formButton = advertForm.querySelector('.ad-form__submit');
+  var advertFormResetButton = advertForm.querySelector('.ad-form__reset');
 
   var setFormLock = function (locked) {
     advertFormParts.forEach(locked ? window.util.setDisabled : window.util.unsetDisabled);
@@ -106,10 +106,19 @@
 
   timeField.addEventListener('change', onTimeChange);
 
-  //
+  var resetPage = function () {
+    window.map.deactivatePage();
+    advertForm.reset();
+    window.pin.delete();
+    window.card.remove();
+    window.map.mainPinReset();
+    window.map.renderAddress(window.map.startAddress);
+    window.domRef.map.classList.add(window.util.fade);
+  };
 
   var onSendForm = function () {
     window.message.showSuccess();
+    resetPage();
   };
 
   var onSendFormError = function (message) {
@@ -121,8 +130,10 @@
 
     var formData = new FormData(advertForm);
 
-    window.send(formData, onSendForm, onSendFormError);
+    window.backend.send(formData, onSendForm, onSendFormError);
   });
+
+  advertFormResetButton.addEventListener('click', resetPage);
 
   window.form = {
     setLock: setFormLock,
