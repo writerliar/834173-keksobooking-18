@@ -7,6 +7,16 @@
     RADIUS: 32
   };
 
+  var mainPinStartCoords = {
+    x: window.domRef.mainPin.offsetLeft,
+    y: window.domRef.mainPin.offsetTop
+  };
+
+  var startAddress = {
+    x: mainPinStartCoords.x + MainPinSize.RADIUS,
+    y: mainPinStartCoords.y + MainPinSize.RADIUS
+  };
+
   var getMainPinLocation = function (height) {
     return {
       x: window.domRef.mainPin.offsetLeft + MainPinSize.RADIUS,
@@ -32,7 +42,7 @@
     window.form.newAdvert.classList.remove(window.util.disabled);
     renderAddress(getMainPinLocation(MainPinSize.HEIGHT));
 
-    window.load(window.pin.onDataLoad, window.pin.onDataLoadError);
+    window.backend.load(window.pin.onDataLoad, window.pin.onDataLoadError);
   };
 
   var onMainPinMouseDown = function () {
@@ -49,11 +59,19 @@
     }
   };
 
+  var mainPinReset = function () {
+    window.domRef.mainPin.style.left = mainPinStartCoords.x + 'px';
+    window.domRef.mainPin.style.top = mainPinStartCoords.y + 'px';
+  };
+
   deactivatePage();
 
   window.map = {
     MainPinSize: MainPinSize,
     renderAddress: renderAddress,
-    getMainPinLocation: getMainPinLocation
+    getMainPinLocation: getMainPinLocation,
+    deactivatePage: deactivatePage,
+    mainPinReset: mainPinReset,
+    startAddress: startAddress
   };
 })();

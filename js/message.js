@@ -2,6 +2,7 @@
 
 (function () {
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var successTemplate = document.querySelector('#success').content.querySelector('.success');
 
   var showError = function (message) {
     var errorMessage = errorTemplate.cloneNode(true);
@@ -38,10 +39,35 @@
         deleteErrorBlock();
       }
     });
+  };
 
+  var showSuccess = function () {
+    var successMessage = successTemplate.cloneNode(true);
+    var successText = successMessage.querySelector('.success__message');
+
+    window.domRef.mainContent.appendChild(successMessage);
+
+    var deleteSuccessBlock = function () {
+      window.util.removeElement(successMessage);
+      document.removeEventListener('keydown', onSuccessEscapePress);
+    };
+
+    var onSuccessEscapePress = function (evt) {
+      evt.preventDefault();
+      window.util.isEscapeEvent(evt, deleteSuccessBlock);
+    };
+
+    document.addEventListener('keydown', onSuccessEscapePress);
+
+    successMessage.addEventListener('click', function (evt) {
+      if (evt.target !== successText) {
+        deleteSuccessBlock();
+      }
+    });
   };
 
   window.message = {
-    showError: showError
+    showError: showError,
+    showSuccess: showSuccess
   };
 })();
