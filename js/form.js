@@ -12,6 +12,7 @@
   var typeSelect = advertForm.querySelector('#type');
   var priceInput = advertForm.querySelector('#price');
   var timeField = advertForm.querySelector('.ad-form__element--time');
+  // var formButton = advertForm.querySelector('.ad-form__submit');
 
   var setFormLock = function (locked) {
     advertFormParts.forEach(locked ? window.util.setDisabled : window.util.unsetDisabled);
@@ -104,6 +105,24 @@
   syncType(getTypeValue(typeSelect.selectedIndex));
 
   timeField.addEventListener('change', onTimeChange);
+
+  //
+
+  var onSendForm = function () {
+    window.message.showSuccess();
+  };
+
+  var onSendFormError = function (message) {
+    window.message.showError(message);
+  };
+
+  advertForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+
+    var formData = new FormData(advertForm);
+
+    window.send(formData, onSendForm, onSendFormError);
+  });
 
   window.form = {
     setLock: setFormLock,
