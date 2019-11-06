@@ -8,6 +8,7 @@
   var priceSelector = filterAdverts.querySelector('#housing-price');
   var roomsSelector = filterAdverts.querySelector('#housing-rooms');
   var guestsSelector = filterAdverts.querySelector('#housing-guests');
+  var featuresField = filterAdverts.querySelector('#housing-features');
   var filterFormList = document.querySelectorAll('.map__filter, .map__checkbox');
 
   var checkPrice = function (price) {
@@ -19,9 +20,7 @@
       return 'low';
     }
 
-    if (price >= 10000 || price <= 50000) {
-      return 'middle';
-    }
+    return 'middle';
   };
 
   var activateFilter = function () {
@@ -42,31 +41,39 @@
       || priceSelector.value === checkPrice(advert.offer.price);
   };
 
-  var checkRooms = function (rooms) {
-    if (rooms > 3 || rooms === 0) {
-      return 'any';
-    }
-
-    if (rooms === 1 || rooms === 2 || rooms === 3) {
-      return rooms;
-    }
-  };
-
   var filterRooms = function (advert) {
     return roomsSelector.value === 'any'
-      || roomsSelector.value === checkRooms(advert.offer.rooms);
+      || parseInt(roomsSelector.value, 10) === advert.offer.rooms;
   };
 
-  // var filterGuests = function (advert) {
-  //   return guestsSelector.value === 'any'
-  //     || guestsSelector.value === advert.offer.guests;
-  // };
+  var filterGuests = function (advert) {
+    return guestsSelector.value === 'any'
+      || parseInt(guestsSelector.value, 10) === advert.offer.guests;
+  };
+
+  var filterFeatures = function (advert) {
+    var advertFeatures = advert.offer.features;
+    var currentFeatures = featuresField.querySelectorAll('.map__checkbox:checked');
+
+    var featuresValue = [];
+
+    currentFeatures.forEach(function (feature) {
+      featuresValue.push(feature.value);
+    });
+
+    var filteredFetures = advertFeatures.filter(function (feature) {
+      return featuresValue.includes(feature);
+    });
+
+    return (featuresValue.length === filteredFetures.length);
+  };
 
   var filterAdvert = function (advert) {
     return filterType(advert)
       && filterPrice(advert)
-      && filterRooms(advert);
-      // && filterGuests(advert);
+      && filterRooms(advert)
+      && filterGuests(advert)
+      && filterFeatures(advert);
   };
 
   var updateFilter = function () {
@@ -76,8 +83,6 @@
 
     window.pin.delete();
     window.pin.add(filteredAdverts);
-
-    console.log(window.pin.adverts.filter(filterAdvert));
   };
 
   var onFilterChange = function () {
