@@ -1,16 +1,16 @@
 'use strict';
 
 (function () {
+  var renderNewAddress = function () {
+    window.map.renderAddress(window.map.getMainPinLocation(window.map.MainPinSize.HEIGHT));
+  };
+
   window.domRef.mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
-    };
-
-    var renderNewAddress = function () {
-      window.map.renderAddress(window.map.getMainPinLocation(window.map.MainPinSize.HEIGHT));
     };
 
     var onMouseMove = function (moveEvt) {
