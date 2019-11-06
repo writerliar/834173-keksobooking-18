@@ -43,9 +43,14 @@
 
   filterAdverts.addEventListener('change', onDebouncedFilterChange);
 
+  var resetFilters = function () {
+    filterAdverts.reset();
+  };
+
   window.filter = {
     activate: activateFilter,
     deactivate: deactivateFilter,
-    update: updateFilter
+    update: updateFilter,
+    reset: resetFilters
   };
 })();

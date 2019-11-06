@@ -106,7 +106,7 @@
 
   timeField.addEventListener('change', onTimeChange);
 
-  var resetPage = function () {
+  var onResetClick = function () {
     window.map.deactivatePage();
     advertForm.reset();
     window.pin.delete();
@@ -114,11 +114,13 @@
     window.map.mainPinReset();
     window.map.renderAddress(window.map.startAddress);
     window.domRef.map.classList.add(window.util.fade);
+    window.filter.reset();
+    syncCapacity(getRoomValue(roomsSelect.selectedIndex));
   };
 
   var onSendForm = function () {
     window.message.showSuccess();
-    resetPage();
+    onResetClick();
   };
 
   var onSendFormError = function (message) {
@@ -133,7 +135,7 @@
     window.backend.send(formData, onSendForm, onSendFormError);
   });
 
-  advertFormResetButton.addEventListener('click', resetPage);
+  advertFormResetButton.addEventListener('click', onResetClick);
 
   window.form = {
     setLock: setFormLock,

@@ -43,6 +43,7 @@
 
   var showSuccess = function () {
     var successMessage = successTemplate.cloneNode(true);
+    var successText = successMessage.querySelector('.success__message');
 
     window.domRef.mainContent.appendChild(successMessage);
 
@@ -58,7 +59,11 @@
 
     document.addEventListener('keydown', onSuccessEscapePress);
 
-    successMessage.addEventListener('click', deleteSuccessBlock);
+    successMessage.addEventListener('click', function (evt) {
+      if (evt.target !== successText) {
+        deleteSuccessBlock();
+      }
+    });
   };
 
   window.message = {
