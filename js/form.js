@@ -106,7 +106,7 @@
 
   timeField.addEventListener('change', onTimeChange);
 
-  var onResetClick = function () {
+  var resetPage = function () {
     window.map.deactivatePage();
     advertForm.reset();
     window.pin.delete();
@@ -116,6 +116,10 @@
     window.domRef.map.classList.add(window.util.fade);
     window.filter.reset();
     syncCapacity(getRoomValue(roomsSelect.selectedIndex));
+  };
+
+  var onResetClick = function () {
+    resetPage();
   };
 
   var onFormSend = function () {
