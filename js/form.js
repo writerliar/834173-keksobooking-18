@@ -118,12 +118,12 @@
     syncCapacity(getRoomValue(roomsSelect.selectedIndex));
   };
 
-  var onSendForm = function () {
+  var onFormSend = function () {
     window.message.showSuccess();
     onResetClick();
   };
 
-  var onSendFormError = function (message) {
+  var onFormSendError = function (message) {
     window.message.showError(message);
   };
 
@@ -132,7 +132,7 @@
 
     var formData = new FormData(advertForm);
 
-    window.backend.send(formData, onSendForm, onSendFormError);
+    window.backend.send(formData, onFormSend, onFormSendError);
   });
 
   advertFormResetButton.addEventListener('click', onResetClick);
