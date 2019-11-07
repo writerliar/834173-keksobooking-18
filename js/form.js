@@ -115,6 +115,7 @@
     window.map.renderAddress(window.map.startAddress);
     window.domRef.map.classList.add(window.util.fade);
     window.filter.reset();
+    window.images.reset();
     syncCapacity(getRoomValue(roomsSelect.selectedIndex));
   };
 
