@@ -2,6 +2,7 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var DUMMY_AVATAR = 'img/muffin-grey.svg';
 
   var avatarFileChooser = document.querySelector('#avatar');
   var avatarPreview = document.querySelector('.ad-form-header__preview img');
@@ -9,7 +10,7 @@
   var advertPhotoChooser = document.querySelector('#images');
   var advertPhotoPreview = document.querySelector('.ad-form__photo');
 
-  var onImageLoad = function (evt) {
+  var onChooserChange = function (evt) {
     var fileChooser = evt.target;
     var file = fileChooser.files[0];
     var fileName = file.name.toLowerCase();
@@ -36,7 +37,16 @@
     }
   };
 
-  avatarFileChooser.addEventListener('change', onImageLoad);
-  advertPhotoChooser.addEventListener('change', onImageLoad);
+  var cleanImages = function () {
+    avatarPreview.src = DUMMY_AVATAR;
+    advertPhotoPreview.style.backgroundImage = 'none';
+  };
+
+  avatarFileChooser.addEventListener('change', onChooserChange);
+  advertPhotoChooser.addEventListener('change', onChooserChange);
+
+  window.images = {
+    reset: cleanImages
+  };
 }
 )();

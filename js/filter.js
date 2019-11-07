@@ -3,7 +3,7 @@
 (function () {
   var PIN_COUNT = 5;
 
-  var Prices = {
+  var HousePrice = {
     MAX: 50000,
     MIN: 10000
   };
@@ -18,11 +18,11 @@
   var featuresValue = [];
 
   var checkPrice = function (price) {
-    if (price > Prices.MAX) {
+    if (price > HousePrice.MAX) {
       return 'high';
     }
 
-    if (price < Prices.MIN) {
+    if (price < HousePrice.MIN) {
       return 'low';
     }
 
