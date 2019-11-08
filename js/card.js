@@ -11,7 +11,7 @@
   };
 
   var getOfferType = function (offer) {
-    return offerTypeEnToRus[offer.type];
+    return offerTypeEnToRus[offer.type.toUpperCase()];
   };
 
   var getOfferPrice = function (offer) {
