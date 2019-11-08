@@ -27,10 +27,10 @@
   };
 
   var priceToType = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
+    BUNGALO: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PALACE: 10000
   };
 
   var valueToIndex = {};
@@ -80,7 +80,7 @@
   };
 
   var syncType = function (type) {
-    var options = priceToType[type];
+    var options = priceToType[type.toUpperCase()];
 
     priceInput.min = options;
     priceInput.placeholder = options;

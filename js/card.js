@@ -4,10 +4,10 @@
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   var offerTypeEnToRus = {
-    flat: 'Квартира',
-    bungalo: 'Бургало',
-    house: 'Дом',
-    palace: 'Дворец'
+    FLAT: 'Квартира',
+    BUNGALO: 'Бургало',
+    HOUSE: 'Дом',
+    PALACE: 'Дворец'
   };
 
   var getOfferType = function (offer) {

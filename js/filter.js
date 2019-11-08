@@ -8,6 +8,14 @@
     MIN: 10000
   };
 
+  var priceRange = {
+    LOW: 'low',
+    MIDDLE: 'middle',
+    HIGH: 'high'
+  };
+
+  var ANY_VALUE = 'any';
+
   var filterAdverts = document.querySelector('.map__filters');
   var typeSelector = filterAdverts.querySelector('#housing-type');
   var priceSelector = filterAdverts.querySelector('#housing-price');
@@ -15,18 +23,18 @@
   var guestsSelector = filterAdverts.querySelector('#housing-guests');
   var featuresField = filterAdverts.querySelector('#housing-features');
   var filterFormList = document.querySelectorAll('.map__filter, .map__checkbox');
-  var featuresValue = [];
+  var featuresValues = [];
 
   var checkPrice = function (price) {
     if (price > HousePrice.MAX) {
-      return 'high';
+      return priceRange.HIGH;
     }
 
     if (price < HousePrice.MIN) {
-      return 'low';
+      return priceRange.LOW;
     }
 
-    return 'middle';
+    return priceRange.MIDDLE;
   };
 
   var activateFilter = function () {
@@ -38,22 +46,22 @@
   };
 
   var filterType = function (advert) {
-    return typeSelector.value === 'any'
+    return typeSelector.value === ANY_VALUE
       || typeSelector.value === advert.offer.type;
   };
 
   var filterPrice = function (advert) {
-    return priceSelector.value === 'any'
+    return priceSelector.value === ANY_VALUE
       || priceSelector.value === checkPrice(advert.offer.price);
   };
 
   var filterRooms = function (advert) {
-    return roomsSelector.value === 'any'
+    return roomsSelector.value === ANY_VALUE
       || +roomsSelector.value === advert.offer.rooms;
   };
 
   var filterGuests = function (advert) {
-    return guestsSelector.value === 'any'
+    return guestsSelector.value === ANY_VALUE
       || +guestsSelector.value === advert.offer.guests;
   };
 
@@ -61,10 +69,10 @@
     var advertFeatures = advert.offer.features;
 
     var filteredFetures = advertFeatures.filter(function (feature) {
-      return featuresValue.includes(feature);
+      return featuresValues.includes(feature);
     });
 
-    return featuresValue.length === filteredFetures.length;
+    return featuresValues.length === filteredFetures.length;
   };
 
   var filterAdvert = function (advert) {
@@ -78,10 +86,10 @@
   var updateFilter = function () {
     var currentFeatures = featuresField.querySelectorAll('.map__checkbox:checked');
 
-    featuresValue = [];
+    featuresValues = [];
 
     currentFeatures.forEach(function (feature) {
-      featuresValue.push(feature.value);
+      featuresValues.push(feature.value);
     });
 
     var filteredAdverts = window.pin.adverts
